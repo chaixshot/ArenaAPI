@@ -26,7 +26,7 @@ function UpdatePlayerNameList()
         local data = GetArena(GetPlayerArena())
         local names = {}
         for source, name in pairs(data.PlayerNameList) do
-            table.insert(names, {name=name, avatar=""})
+            table.insert(names, {name=name, avatar=data.PlayerAvatar[source]})
         end
         SendNUIMessage({ type = "playerNameList", Names = names, })
     end

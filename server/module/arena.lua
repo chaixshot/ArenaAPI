@@ -133,6 +133,7 @@ function CreateArena(identifier, ownersource)
             arena.PlayerList[source] = true
             arena.PlayerScoreList[source] = {}
             arena.PlayerNameList[source] = GetPlayerName(source)
+            arena.PlayerAvatar[source] = GetAvatar(source)
             arena.CurrentCapacity = arena.CurrentCapacity + 1
 			
 			local data = GetDefaultDataFromArena(arena.ArenaIdentifier)

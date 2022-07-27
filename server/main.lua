@@ -38,6 +38,7 @@ function ArenaCreatorHelper(identifier)
         PlayerList = {},
         PlayerScoreList = {},
         PlayerNameList = {},
+        PlayerAvatar = {},
         -----
         ArenaState = "ArenaInactive",
         -----
@@ -122,3 +123,48 @@ RegisterCommand("minigame", function(source, args, rawCommand)
         end
     end
 end, false)
+
+function StringSplit(inputstr, sep)
+    if sep == nil then
+        sep = "%s"
+    end
+    local t={} ; i=1
+    for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
+        t[i] = str
+        i = i + 1
+    end
+    return t
+end
+
+function GetAvatar(source)
+	local steamid = "none"
+	for k,v in pairs(GetPlayerIdentifiers(source)) do
+		if string.sub(v, 1, string.len("steam:")) == "steam:" then
+			steamid = v
+		end
+	end
+	local SteamIDInt = tonumber(string.sub(steamid, 7), 16)
+	local avaterurl
+	local timer = 100
+	
+	if not SteamIDInt then
+		return "http://cdn.akamai.steamstatic.com/steamcommunity/public/images/avatars/f8/f8de58eb18a0cad87270ef1d1250c574498577fc_full.jpg"
+	end
+	PerformHttpRequest('http://steamcommunity.com/profiles/' .. SteamIDInt .. '/?xml=1', function(Error, Content, Head)
+		if Content then
+			local SteamProfileSplitted = StringSplit(Content, '\n')
+			for i, Line in ipairs(SteamProfileSplitted) do
+				if Line:find('<avatarFull>') then
+					avaterurl = Line:gsub('	<avatarFull><!%[CDATA%[', ''):gsub(']]></avatarFull>', '')
+					avaterurl = string.sub (avaterurl, 1, string.len(avaterurl)-1)
+					break
+				end
+			end
+		end
+	end)
+	while not avaterurl and timer > 0 do
+		timer = timer-1
+		Wait(1)
+	end
+	return avaterurl
+end
