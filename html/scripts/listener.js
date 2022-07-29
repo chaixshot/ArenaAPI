@@ -19,7 +19,7 @@ $(function(){
 		var item = event.data;
 		if (item.type === "ui"){
 			display(item.status);
-			$(".seconds").text("กำลังรอผู้เล่น");
+			$(".seconds").text("Waiting for players.");
 		}
 
 		if (item.type === "arenaName"){
@@ -41,9 +41,9 @@ $(function(){
 		}
 		
 		if (item.type === "updateTime"){
-			$(".seconds").text("เกมจะเริ่มใน: "+ item.time +" วินาที");
+			$(".seconds").text("Game will start in: "+ item.time +" second.");
 		}else if (item.type !== "playerNameList"){
-			$(".seconds").text("กำลังรอผู้เล่น");
+			$(".seconds").text("Waiting for players.");
 		}
 		
 		if (item.type === "playerNameList"){
