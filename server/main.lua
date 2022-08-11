@@ -136,6 +136,8 @@ function StringSplit(inputstr, sep)
     return t
 end
 
+local StoreAvatar = {}
+
 function GetAvatar(source)
 	local steamid = "none"
 	for k,v in pairs(GetPlayerIdentifiers(source)) do
@@ -143,6 +145,11 @@ function GetAvatar(source)
 			steamid = v
 		end
 	end
+	
+	if StoreAvatar[steamid] then
+		return StoreAvatar[steamid]
+	end
+	
 	local SteamIDInt = tonumber(string.sub(steamid, 7), 16)
 	local avaterurl
 	local timer = 100
@@ -150,6 +157,7 @@ function GetAvatar(source)
 	if not SteamIDInt then
 		return "http://cdn.akamai.steamstatic.com/steamcommunity/public/images/avatars/f8/f8de58eb18a0cad87270ef1d1250c574498577fc_full.jpg"
 	end
+	
 	PerformHttpRequest('http://steamcommunity.com/profiles/' .. SteamIDInt .. '/?xml=1', function(Error, Content, Head)
 		if Content then
 			local SteamProfileSplitted = StringSplit(Content, '\n')
@@ -162,9 +170,31 @@ function GetAvatar(source)
 			end
 		end
 	end)
+	
 	while not avaterurl and timer > 0 do
 		timer = timer-1
-		Wait(1)
+		Wait(0)
 	end
+	
+	StoreAvatar[steamid] = avaterurl
+	
 	return avaterurl
 end
+
+CreateThread(function()
+	Wait(2000)
+	local resourceName = GetCurrentResourceName()
+	local currentVersion = GetResourceMetadata(resourceName, "version", 0)
+	PerformHttpRequest("https://api.github.com/repos/chaixshot/ArenaAPI/releases/latest", function (errorCode, resultData, resultHeaders)
+		if errorCode == 200 then
+			local data = json.decode(resultData)
+			if currentVersion ~= data.name then
+				print("------------------------------")
+				print("Update available for ^1"..resourceName.."^0")
+				print("Please update to the latest release ^2(version: "..data.name..")^0")
+				print("Check in ^3"..data.html_url.."^0")
+				print("------------------------------")
+			end
+		end
+	end)
+end)
