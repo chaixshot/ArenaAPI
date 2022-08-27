@@ -143,7 +143,9 @@ function CreateArena(identifier, ownersource)
 				arena.ArenaState = "ArenaActive"
 			else
 				data.JoinAfterArenaStart = true
-				SetPlayerRoutingBucket(source, ArenaList[identifier].OwnWorldID)
+				SetTimeout(1000, function()
+					SetPlayerRoutingBucket(source, ArenaList[identifier].OwnWorldID)
+				end)
 			end
 			TriggerClientEvent("ArenaAPI:sendStatus", -1, "updateData", ArenaList)
 			TriggerClientEvent("ArenaAPI:sendStatus", source, "join", data)
@@ -156,7 +158,7 @@ function CreateArena(identifier, ownersource)
     self.RemovePlayer = function(source, skipEvent)
         -- if arena.PlayerList[source] ~= nil then
             if arena.DeleteWorldAfterWin then
-				SetTimeout(3000, function()
+				SetTimeout(1000, function()
 					SetPlayerRoutingBucket(source, 0)
 				end)
             end

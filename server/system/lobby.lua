@@ -16,7 +16,9 @@ function UpdateLobbies()
 
                     if v.OwnWorld then
                         for id, _ in pairs(v.PlayerList) do
-                            SetPlayerRoutingBucket(id, v.OwnWorldID)
+							SetTimeout(1000, function()
+								SetPlayerRoutingBucket(id, v.OwnWorldID)
+							end)
                         end
                     end
                 end
