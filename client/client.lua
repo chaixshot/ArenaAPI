@@ -75,7 +75,6 @@ AddEventHandler('IsPauseMenuActive', function(toggle)
 	end
 end)
 
-
 function vRPBs.ClientTypePassword()
 	local password = KeyboardInput("Password:", "", 100)
 	return tostring(password)

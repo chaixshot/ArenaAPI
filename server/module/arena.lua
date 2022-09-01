@@ -130,7 +130,7 @@ function CreateArena(identifier, ownersource)
     self.AddPlayer = function(source, AfterArenaStart)
         if arena.PlayerList[source] == nil then
             PlayerInfo[source] = arena.ArenaIdentifier
-            arena.PlayerList[source] = true
+            arena.PlayerList[source] = {name=GetPlayerName(source)}
             arena.PlayerScoreList[source] = {}
             arena.PlayerNameList[source] = GetPlayerName(source)
             arena.PlayerAvatar[source] = GetAvatar(source)
