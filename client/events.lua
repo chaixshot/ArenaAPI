@@ -29,9 +29,7 @@ AddEventHandler("ArenaAPI:sendStatus", function(type, data)
 		end
         CallOn(arena, "start", data)
         if PlayerData.CurrentArena == arena then
-			NetworkSetTalkerProximity(10000.0) -- ความใกล้ชิด
-			MumbleSetAudioInputDistance(10000.0) -- ระยะเสียงที่ส่ง
-			MumbleSetAudioOutputDistance(10000.0) -- ระยะเสียงที่รับ
+			SendNUIMessage({ type = "ui", status = false})
             IsArenaBusy = true
 			Wait(1000)
         end
@@ -46,7 +44,6 @@ AddEventHandler("ArenaAPI:sendStatus", function(type, data)
             ArenaData[arena].MaximumArenaTime = data.MaximumLobbyTime + 1
         end
         if PlayerData.CurrentArena == arena then
-			TriggerEvent("mumble:ResetVoiceTarget")
             IsArenaBusy = false
 			PlayerData.CurrentArena = "none"
 			PlayerList = {}
@@ -60,7 +57,7 @@ AddEventHandler("ArenaAPI:sendStatus", function(type, data)
 		if data.JoinAfterArenaStart then
 			TriggerEvent("ArenaAPI:sendStatus", "start", data)
 		else
-			SendNUIMessage({ type = "ui", status = true, })
+			SendNUIMessage({ type = "ui", status = true})
 			SendNUIMessage({ type = "arenaName", arenaName = data.ArenaLabel })
 			SendNUIMessage({ type = "arenaImage", arenaImage = string.gsub(data.ArenaIdentifier, "%d+", "") })
 		end
@@ -71,12 +68,11 @@ AddEventHandler("ArenaAPI:sendStatus", function(type, data)
         CallOn(arena, "leave", data)
 
         if PlayerData.CurrentArena == arena then
-			TriggerEvent("mumble:ResetVoiceTarget")
             IsArenaBusy = false
 			PlayerList = {}
         end
 
         PlayerData.CurrentArena = "none"
-        SendNUIMessage({ type = "ui", status = false, })
+        SendNUIMessage({ type = "ui", status = false})
     end
 end)

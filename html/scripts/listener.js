@@ -8,18 +8,15 @@ $(document).keydown(function (e) // Disable Tab Key
 });
 
 $(function(){
-    function display(bool) {
-        if (bool) {
-            $(".container").fadeIn();		
-        } else { 
-            $(".container").fadeOut();
-        }
-    }
 	window.addEventListener('message', function(event) {
 		var item = event.data;
 		if (item.type === "ui"){
-			display(item.status);
-			$(".seconds").text("Waiting for players.");
+			if (item.status) {
+				$(".seconds").text("Waiting for players.");
+				$(".container").fadeIn();		
+			} else { 
+				$(".container").fadeOut();
+			}
 		}
 
 		if (item.type === "arenaName"){
