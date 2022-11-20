@@ -63,7 +63,7 @@ RegisterCommand("minigame", function(source, args, rawCommand)
                 local arenaInfo = GetDefaultDataFromArena(arenaName)
                 local arena = GetArenaInstance(arenaName)
                 if arena.IsArenaPublic() then
-                    if not IsArenaBusy(arenaName) and arena.MaximumLobbyTime > 1 then
+                    if not IsArenaBusy(arenaName) then
                         if arenaInfo.MaximumCapacity > arenaInfo.CurrentCapacity then
                             if not IsPlayerInCooldown(source, arenaName) then
 								if arenaInfo.Password == "" then
