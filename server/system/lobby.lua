@@ -5,7 +5,7 @@ function UpdateLobbies()
         if IsArenaActive(k) then
             if v.MinimumCapacity - 1 < v.CurrentCapacity then
                 v.MaximumLobbyTime = v.MaximumLobbyTime - 1
-                if v.MaximumLobbyTime == 0 then
+                if v.MaximumLobbyTime == 1 then
                     v.MaximumLobbyTime = v.MaximumLobbyTimeSaved
 
                     v.ArenaState = "ArenaBusy"
