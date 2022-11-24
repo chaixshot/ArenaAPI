@@ -63,7 +63,8 @@ RegisterCommand("minigame", function(source, args, rawCommand)
                 local arenaInfo = GetDefaultDataFromArena(arenaName)
                 local arena = GetArenaInstance(arenaName)
                 if arena.IsArenaPublic() then
-                    if not IsArenaBusy(arenaName) then
+					local _, CurrentLobbyTime = arena.GetMaximumLobbyTime()
+                    if not IsArenaBusy(arenaName) and CurrentLobbyTime > 1 then
                         if arenaInfo.MaximumCapacity > arenaInfo.CurrentCapacity then
                             if not IsPlayerInCooldown(source, arenaName) then
 								if arenaInfo.Password == "" then
@@ -73,6 +74,7 @@ RegisterCommand("minigame", function(source, args, rawCommand)
 									BSClients.ClientTypePassword(source, {}, function(password)
 										if arenaInfo.Password == password then
 											arena.MaximumLobbyTime = arena.MaximumLobbyTimeSaved
+											
 											GetArenaInstance(args[2]).AddPlayer(source)
 										else
 											SendMessage(source, "~r~Incorrect Password.")
@@ -85,6 +87,7 @@ RegisterCommand("minigame", function(source, args, rawCommand)
                         else
                             SendMessage(source, Config.MessageList["maximum_people"])
                         end
+						
                     else
 						if arenaInfo.CanJoinAfterStart then
 							if arenaInfo.Password == "" then
@@ -155,10 +158,10 @@ function GetAvatar(source)
 	local timer = 100
 	
 	if not SteamIDInt then
-		return "http://cdn.akamai.steamstatic.com/steamcommunity/public/images/avatars/f8/f8de58eb18a0cad87270ef1d1250c574498577fc_full.jpg"
+		return "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/avatars/f8/f8de58eb18a0cad87270ef1d1250c574498577fc_full.jpg"
 	end
 	
-	PerformHttpRequest('http://steamcommunity.com/profiles/' .. SteamIDInt .. '/?xml=1', function(Error, Content, Head)
+	PerformHttpRequest('https://steamcommunity.com/profiles/' .. SteamIDInt .. '/?xml=1', function(Error, Content, Head)
 		if Content then
 			local SteamProfileSplitted = StringSplit(Content, '\n')
 			for i, Line in ipairs(SteamProfileSplitted) do
