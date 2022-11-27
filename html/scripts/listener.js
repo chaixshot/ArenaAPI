@@ -20,7 +20,7 @@ $(function(){
 		}
 
 		if (item.type === "arenaName"){
-			$(".arenaName").text(item.arenaName);
+			$(".arenaName").html(item.arenaName);
 			let map = item.arenaName.match(/\(([^)]+)\)/);
 			if(map!=null){
 				$(".map").show();
