@@ -111,6 +111,14 @@ function CreateArena(identifier, ownersource)
     self.SetArenaPublic = function(value)
         arena.ArenaIsPublic = value
     end
+	
+    self.SetArenaImageUrl = function(value)
+        arena.ArenaImageUrl = value
+    end
+	
+    self.GetArenaImageUrl = function(value)
+		return arena.ArenaImageUrl
+    end
 
     self.IsArenaPublic = function()
         return arena.ArenaIsPublic

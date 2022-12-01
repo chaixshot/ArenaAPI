@@ -59,7 +59,11 @@ AddEventHandler("ArenaAPI:sendStatus", function(type, data)
 		else
 			SendNUIMessage({ type = "ui", status = true})
 			SendNUIMessage({ type = "arenaName", arenaName = data.ArenaLabel })
-			SendNUIMessage({ type = "arenaImage", arenaImage = string.gsub(data.ArenaIdentifier, "%d+", "") })
+			if data.ArenaImageUrl and data.ArenaImageUrl ~= "" then
+				SendNUIMessage({ type = "arenaImageURL", arenaImage = data.ArenaImageUrl })
+			else
+				SendNUIMessage({ type = "arenaImage", arenaImage = string.gsub(data.ArenaIdentifier, "%d+", "") })
+			end
 		end
         UpdatePlayerNameList()
     end

@@ -32,6 +32,7 @@ function ArenaCreatorHelper(identifier)
         MaximumLobbyTime = 30,
         -----
         ArenaIsPublic = true,
+        ArenaImageUrl = nil,
 		CanJoinAfterStart = false,
 		Password = "",
         -----

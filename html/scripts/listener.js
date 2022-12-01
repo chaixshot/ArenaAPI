@@ -37,6 +37,10 @@ $(function(){
 			$(".banner").attr("src","nui://ArenaLobby/html/img/games/"+item.arenaImage+".jpg");
 		}
 		
+		if (item.type === "arenaImageURL"){
+			$(".banner").attr("src",item.arenaImage);
+		}
+		
 		if (item.type === "updateTime"){
 			$(".seconds").text("Game will start in: "+ item.time +" second.");
 		}else if (item.type !== "playerNameList"){
