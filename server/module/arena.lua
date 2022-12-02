@@ -11,6 +11,11 @@ function CreateArena(identifier, ownersource)
     --------------------------------------------
     -- Basic information about arena      --
     --------------------------------------------
+	if ownersource then
+		arena.ownersource = ownersource
+		arena.ownername = GetPlayerName(ownersource)
+	end
+	
     self.SetOwnWorld = function(result)
         arena.OwnWorld = result
         if result then
@@ -62,7 +67,6 @@ function CreateArena(identifier, ownersource)
     --------
     self.SetArenaLabel = function(name)
         arena.ArenaLabel = name
-		arena.ownername = GetPlayerName(ownersource)
 		TriggerClientEvent("ArenaAPI:sendStatus", -1, "updateData", ArenaList)
     end
 
