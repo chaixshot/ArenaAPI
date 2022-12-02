@@ -177,6 +177,7 @@ function CreateArena(identifier, ownersource)
 
             PlayerInfo[source] = "none"
             arena.PlayerList[source] = nil
+			arena.PlayerAvatar[source] = nil
             arena.PlayerScoreList[source] = nil
             arena.PlayerNameList[source] = nil
 
