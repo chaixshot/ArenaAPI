@@ -13,6 +13,7 @@ $(function(){
 		if (item.type === "ui"){
 			if (item.status) {
 				$(".seconds").text("Waiting for players.");
+				$(".container").show();
 				$(".container").fadeIn();		
 			} else { 
 				$(".container").fadeOut();
