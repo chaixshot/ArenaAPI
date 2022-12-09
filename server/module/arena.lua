@@ -21,7 +21,7 @@ function CreateArena(identifier, ownersource)
         if result then
             if ArenaList[identifier].OwnWorldID == 0 then
                 local newID = 0
-                for i = 1, 500 do
+                for i = 1, 1000 do
                     if not ClaimedVirtualWorld[i] then
                         newID = i
                         ClaimedVirtualWorld[i] = i
