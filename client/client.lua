@@ -69,10 +69,20 @@ CreateThread(function()
     end
 end)
 
-AddEventHandler('IsPauseMenuActive', function(toggle)
-	if IsPlayerInAnyArena() and not IsArenaBusy then
-		SendNUIMessage({ type = "ui", status = not toggle})
-	end
+local onPause = false
+CreateThread(function()
+    while true do
+		if IsPauseMenuActive() then
+			if not onPause then
+				onPause = not onPause
+				SendNUIMessage({ type = "ui", status = false})
+			end
+		elseif onPause then
+			onPause = not onPause
+			SendNUIMessage({ type = "ui", status = true})
+		end
+		Citizen.Wait(500)
+    end
 end)
 
 function vRPBs.ClientTypePassword()
