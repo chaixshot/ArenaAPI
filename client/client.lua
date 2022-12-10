@@ -79,9 +79,11 @@ CreateThread(function()
 			end
 		elseif onPause then
 			onPause = not onPause
-			SendNUIMessage({ type = "ui", status = true})
+			if IsPlayerInAnyArena() then
+				SendNUIMessage({ type = "ui", status = true})
+			end
 		end
-		Citizen.Wait(500)
+		Citizen.Wait(100)
     end
 end)
 
