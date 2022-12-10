@@ -75,11 +75,13 @@ CreateThread(function()
 		if IsPauseMenuActive() then
 			if not onPause then
 				onPause = not onPause
-				SendNUIMessage({ type = "ui", status = false})
+				if IsPlayerInAnyArena() and not IsArenaBusy then
+					SendNUIMessage({ type = "ui", status = false})
+				end
 			end
 		elseif onPause then
 			onPause = not onPause
-			if IsPlayerInAnyArena() then
+			if IsPlayerInAnyArena() and not IsArenaBusy then
 				SendNUIMessage({ type = "ui", status = true})
 			end
 		end
