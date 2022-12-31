@@ -180,6 +180,14 @@ function CreateArena(identifier, ownersource)
 			arena.PlayerAvatar[source] = nil
             arena.PlayerScoreList[source] = nil
             arena.PlayerNameList[source] = nil
+			
+			if arena.ownersource == source then
+				for k,v in pairs(arena.PlayerList) do
+					arena.ownersource = k
+					arena.ownername = GetPlayerName(k)
+					break
+				end
+			end
 
             arena.CurrentCapacity = arena.CurrentCapacity - 1
             if arena.CurrentCapacity == 0 then

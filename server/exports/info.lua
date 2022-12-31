@@ -3,6 +3,11 @@ function GetArenaList()
 end
 exports("GetArenaList", GetArenaList)
 
+function GetArena(identifier)
+    return ArenaList[identifier]
+end
+exports("GetArena", GetArena)
+
 function DoesArenaExists(identifier)
     return ArenaList[identifier] ~= nil
 end
@@ -29,7 +34,7 @@ end
 exports("GetPlayerArena", GetPlayerArena)
 
 function IsArenaBusy(identifier)
-    return ArenaList[identifier] and ArenaList[identifier].ArenaState == "ArenaBusy"
+    return ArenaList[identifier] and ArenaList[identifier].ArenaState == "ArenaBusy" or false
 end
 exports("IsArenaBusy", IsArenaBusy)
 

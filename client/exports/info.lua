@@ -1,32 +1,32 @@
-function IsCurrentArenaBusy()
-    return IsArenaBusy
-end
-exports("IsCurrentArenaBusy", IsCurrentArenaBusy)
-
-function GetCurrentArenaIdentifier()
-    return PlayerData.CurrentArena
-end
-exports("GetCurrentArenaIdentifier", GetCurrentArenaIdentifier)
-
-function GetAllArena()
+function GetArenaList()
     return ArenaData
 end
-exports("GetAllArena", GetAllArena)
+exports("GetArenaList", GetArenaList)
 
 function GetArena(identifier)
     return ArenaData[identifier]
 end
 exports("GetArena", GetArena)
 
+function DoesArenaExists(identifier)
+    return ArenaData[identifier] ~= nil
+end
+exports("DoesArenaExists", DoesArenaExists)
+
+function GetPlayerList(identifier)
+    return ArenaData[identifier] and ArenaData[identifier].PlayerList or {}
+end
+exports("GetPlayerList", GetPlayerList)
+
 function IsPlayerInAnyArena()
     return PlayerData.CurrentArena ~= "none"
 end
 exports("IsPlayerInAnyArena", IsPlayerInAnyArena)
 
-function GetPlayerArena()
-    return PlayerData.CurrentArena
+function IsArenaBusy(identifier)
+    return ArenaData[identifier] and ArenaData[identifier].ArenaState == "ArenaBusy" or false
 end
-exports("GetPlayerArena", GetPlayerArena)
+exports("IsArenaBusy", IsArenaBusy)
 
 function GetPlayerListArena()
     return PlayerList
@@ -68,3 +68,13 @@ function GetCurrentArenaData(identifier)
     }
 end
 exports("GetCurrentArenaData", GetCurrentArenaData)
+
+function GetCurrentArenaIdentifier()
+    return PlayerData.CurrentArena
+end
+exports("GetCurrentArenaIdentifier", GetCurrentArenaIdentifier)
+
+function GetPlayerArena()
+    return PlayerData.CurrentArena
+end
+exports("GetPlayerArena", GetPlayerArena)
