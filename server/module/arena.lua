@@ -130,6 +130,7 @@ function CreateArena(identifier, ownersource)
 	
 	self.SetJoinAfterStart = function(value)
         arena.CanJoinAfterStart = value
+		TriggerClientEvent("ArenaAPI:sendStatus", -1, "updateData", ArenaList)
     end
 	
 	self.SetPassword = function(value)
