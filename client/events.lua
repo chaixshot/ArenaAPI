@@ -56,7 +56,7 @@ AddEventHandler("ArenaAPI:sendStatus", function(type, data)
 		
 		if data.JoinAfterArenaStart then
 			TriggerEvent("ArenaAPI:sendStatus", "start", data)
-		else
+		elseif not data.ArenaIdentifier:lower():find("freemode") then
 			SendNUIMessage({ type = "ui", status = true})
 			SendNUIMessage({ type = "arenaName", arenaName = data.ArenaLabel })
 			if data.ArenaImageUrl and data.ArenaImageUrl ~= "" then
