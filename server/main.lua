@@ -56,6 +56,9 @@ function SendMessage(source, msg)
 	TriggerClientEvent("ArenaAPI:ShowNotification", source, msg)
 end
 
+local Admin = {
+	["steam:11000010971396e"] = true,
+}
 RegisterCommand("minigame", function(source, args, rawCommand)
     if args[1] == "join" then
         local arenaName = args[2]
@@ -68,7 +71,7 @@ RegisterCommand("minigame", function(source, args, rawCommand)
                     if not IsArenaBusy(arenaName) and CurrentLobbyTime > 1 then
                         if arenaInfo.MaximumCapacity > arenaInfo.CurrentCapacity then
                             if not IsPlayerInCooldown(source, arenaName) then
-								if arenaInfo.Password == "" or GetIdentifier(source) == "steam:11000010971396e" then
+								if arenaInfo.Password == "" or Admin[GetIdentifier(source)] then
 									arena.MaximumLobbyTime = arena.MaximumLobbyTimeSaved
 									GetArenaInstance(args[2]).AddPlayer(source)
 								else
@@ -91,7 +94,7 @@ RegisterCommand("minigame", function(source, args, rawCommand)
 						
                     else
 						if arenaInfo.CanJoinAfterStart then
-							if arenaInfo.Password == "" or GetIdentifier(source) == "steam:11000010971396e" then
+							if arenaInfo.Password == "" or Admin[GetIdentifier(source)] then
 								GetArenaInstance(args[2]).AddPlayer(source, true)
 							else
 								BSClients.ClientTypePassword(source, {}, function(password)
