@@ -1,5 +1,5 @@
 function UpdateLobbies()
-    SetTimeout(1000, UpdateLobbies)
+    Citizen.SetTimeout(1000, UpdateLobbies)
 
     for k, v in pairs(ArenaList) do
         if IsArenaActive(k) then
@@ -16,9 +16,7 @@ function UpdateLobbies()
 
                     if v.OwnWorld then
                         for id, _ in pairs(v.PlayerList) do
-							SetTimeout(1000, function()
-								SetPlayerRoutingBucket(id, v.OwnWorldID)
-							end)
+                            SetPlayerRoutingBucket(id, v.OwnWorldID)
                         end
                     end
                 end
@@ -32,10 +30,10 @@ function UpdateLobbies()
     end
 end
 
-SetTimeout(1000, UpdateLobbies)
+Citizen.SetTimeout(1000, UpdateLobbies)
 
 function UpdateArenaGame()
-    SetTimeout(1000, UpdateArenaGame)
+    Citizen.SetTimeout(1000, UpdateArenaGame)
 
     for k, v in pairs(ArenaList) do
         if IsArenaBusy(k) then
@@ -62,4 +60,4 @@ function UpdateArenaGame()
     end
 end
 
-SetTimeout(1000, UpdateArenaGame)
+Citizen.SetTimeout(1000, UpdateArenaGame)

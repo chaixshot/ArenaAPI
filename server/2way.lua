@@ -104,7 +104,7 @@ local function Tunnel_Resolve(itable,key)
         delay_data[2] = delay_data[2]+add_delay
 
         if delay_data[2] > 0 then
-            SetTimeout(delay_data[2], function()
+            Citizen.SetTimeout(delay_data[2], function()
                 delay_data[2] = delay_data[2]-add_delay
                 if type(callback) == "function" then
                     local rid = ids:gen()
