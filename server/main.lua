@@ -131,16 +131,21 @@ RegisterCommand("minigame", function(source, args, rawCommand)
     end
 end, false)
 
-function StringSplit(inputstr, sep)
-    if sep == nil then
-        sep = "%s"
-    end
-    local t={} ; i=1
-    for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
-        t[i] = str
-        i = i + 1
-    end
-    return t
+---Convert string to table by @sep
+---@param inputstr string
+---@param sep string
+---@return table
+function string.split(inputstr, sep)
+	if sep == nil then
+		sep = "%s"
+	end
+	local t = {}
+	local i = 1
+	for str in string.gmatch(inputstr or "", "([^" .. sep .. "]+)") do
+		t[i] = str
+		i += 1
+	end
+	return t
 end
 
 function GetIdentifier(source)
@@ -154,47 +159,58 @@ function GetIdentifier(source)
 	return steamid or ""
 end
 
-local StoreAvatar = {}
-function GetAvatar(source)
-	local steamid = GetIdentifier(source)
-	
-	if StoreAvatar[steamid] then
-		return StoreAvatar[steamid]
+local AvatarCache = {}
+function GetSteamAvatar(source)
+	local steamid = "none"
+	for k, v in pairs(GetPlayerIdentifiers(source)) do
+		if string.sub(v, 1, string.len("steam:")) == "steam:" then
+			steamid = v
+		end
 	end
-	
-	local SteamIDInt = tonumber(string.sub(steamid, 7), 16)
-	local avaterurl
-	local timer = 100
-	
-	if not SteamIDInt then
+
+	if AvatarCache[steamid] then
+		return AvatarCache[steamid]
+	end
+
+	local steamIDInt = tonumber(string.sub(steamid, 7), 16)
+	local avaterurl = promise.new()
+
+	if not steamIDInt then
 		return "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/avatars/f8/f8de58eb18a0cad87270ef1d1250c574498577fc_full.jpg"
 	end
-	
-	PerformHttpRequest('https://steamcommunity.com/profiles/' .. SteamIDInt .. '/?xml=1', function(Error, Content, Head)
+
+	Citizen.SetTimeout(5000, function()
+		avaterurl:resolve(nil)
+	end)
+
+	PerformHttpRequest('https://steamcommunity.com/profiles/' .. steamIDInt .. '/?xml=1', function(Error, Content, Head)
 		if Content then
-			local SteamProfileSplitted = StringSplit(Content, '\n')
+			local SteamProfileSplitted = string.split(Content, '\n')
+
 			for i, Line in ipairs(SteamProfileSplitted) do
 				if Line:find('<avatarFull>') then
-					avaterurl = Line:gsub('	<avatarFull><!%[CDATA%[', ''):gsub(']]></avatarFull>', '')
-					avaterurl = string.sub (avaterurl, 1, string.len(avaterurl)-1)
+					local url = Line:gsub('	<avatarFull><!%[CDATA%[', ''):gsub(']]></avatarFull>', '')
+					url = string.sub(url, 1, string.len(url) - 1)
+					avaterurl:resolve(url)
 					break
 				end
 			end
+			
+			avaterurl:resolve(nil)
 		end
 	end)
-	
-	while not avaterurl and timer > 0 do
-		timer = timer-1
-		Wait(0)
+
+	AvatarCache[steamid] = Citizen.Await(avaterurl)
+
+	if AvatarCache[steamid] then
+		return AvatarCache[steamid]
+	else
+		return "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/avatars/f8/f8de58eb18a0cad87270ef1d1250c574498577fc_full.jpg"
 	end
-	
-	StoreAvatar[steamid] = avaterurl
-	
-	return avaterurl
 end
 
-CreateThread(function()
-	Wait(2000)
+Citizen.CreateThread(function()
+	Citizen.Wait(2000)
 	local resourceName = GetCurrentResourceName()
 	local currentVersion = GetResourceMetadata(resourceName, "version", 0)
 	PerformHttpRequest("https://api.github.com/repos/chaixshot/ArenaAPI/releases/latest", function (errorCode, resultData, resultHeaders)
