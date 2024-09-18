@@ -1,59 +1,87 @@
+---@return table An array of arenas
 function GetArenaList()
     return ArenaList
 end
-exports("GetArenaList", GetArenaList)
 
+---@param identifier string Arena identifier
+---@return table An instance of arena
 function GetArena(identifier)
     return ArenaList[identifier]
 end
-exports("GetArena", GetArena)
 
+---@param identifier string Arena identifier
+---@return boolean?
 function DoesArenaExists(identifier)
     return ArenaList[identifier] ~= nil
 end
-exports("DoesArenaExists", DoesArenaExists)
 
+---@param identifier string Arena identifier
+---@return table
 function GetPlayerList(identifier)
     return ArenaList[identifier] and ArenaList[identifier].PlayerList or {}
 end
-exports("GetPlayerList", GetPlayerList)
 
+---@param source integer Player server id
+---@return boolean?
 function IsPlayerInAnyArena(source)
     return PlayerInfo[source] ~= "none"
 end
-exports("IsPlayerInAnyArena", IsPlayerInAnyArena)
 
-function IsPlayerInArena(source, arena)
-    return PlayerInfo[source] == arena
+---@param source integer Player server id
+---@param identifier string Arena identifier
+---@return boolean?
+function IsPlayerInArena(source, identifier)
+    return PlayerInfo[source] == identifier
 end
-exports("IsPlayerInArena", IsPlayerInArena)
 
+---@param source integer Player server id
+---@return string Identifier of the arena, if he isn't anywhere it will return "none"
 function GetPlayerArena(source)
     return PlayerInfo[source]
 end
-exports("GetPlayerArena", GetPlayerArena)
 
+---@param identifier string Arena identifier
+---@return boolean?
 function IsArenaBusy(identifier)
     return ArenaList[identifier] and ArenaList[identifier].ArenaState == "ArenaBusy" or false
 end
-exports("IsArenaBusy", IsArenaBusy)
 
-function GetPlayerCount(identifier)
-    return ArenaList[identifier].CurrentCapacity
-end
-exports("GetPlayerCount", GetPlayerCount)
-
+---@param identifier string Arena identifier
+---@return boolean?
 function IsArenaActive(identifier)
     return ArenaList[identifier] and ArenaList[identifier].ArenaState == "ArenaActive"
 end
-exports("IsArenaActive", IsArenaActive)
 
+---@param identifier string Arena identifier
+---@return boolean?
 function IsArenaInactive(identifier)
     return ArenaList[identifier] and ArenaList[identifier].ArenaState == "ArenaInactive"
 end
-exports("IsArenaInactive", IsArenaInactive)
 
+---@param identifier string Arena identifier
+---@return integer
+function GetPlayerCount(identifier)
+    return ArenaList[identifier].CurrentCapacity
+end
+
+---@param identifier string Arena identifier
+---@return string State of arena
+---ArenaInactive - No one is in a lobby or arena
+---ArenaActive - People are in lobby
+---ArenaBusy - People playing already
 function GetArenaState(identifier)
     return ArenaList[identifier].ArenaState
 end
+
+exports("GetArenaList", GetArenaList)
+exports("GetArena", GetArena)
+exports("DoesArenaExists", DoesArenaExists)
+exports("GetPlayerList", GetPlayerList)
+exports("IsPlayerInAnyArena", IsPlayerInAnyArena)
+exports("IsPlayerInArena", IsPlayerInArena)
+exports("GetPlayerArena", GetPlayerArena)
+exports("IsArenaBusy", IsArenaBusy)
+exports("GetPlayerCount", GetPlayerCount)
+exports("IsArenaActive", IsArenaActive)
+exports("IsArenaInactive", IsArenaInactive)
 exports("GetArenaState", GetArenaState)

@@ -28,11 +28,15 @@ function RemoveEventsWithNameResource(nameResource)
     end
 end
 
---Register event
---Return true if event is registered, false if is not
+---Return true if event is registered, false if is not
+---@param identifier string Arena identifier
+---@param eventName string Event handle 'roundend, join, leave, start, end'
+---@param cb function Callback function
+---@return boolean
 function On(identifier, eventName, cb)
     local invokingName = GetInvokingResource()
     eventName = string.lower(eventName)
+
     if not ValidateEvents(eventName) then
         return false
     end
@@ -48,7 +52,9 @@ function On(identifier, eventName, cb)
     if Events[identifier][eventName][invokingName] == nil then
         Events[identifier][eventName][invokingName] = {}
     end
+
     table.insert(Events[identifier][eventName][invokingName], cb)
+
     return true
 end
 

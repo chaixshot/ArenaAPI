@@ -28,8 +28,11 @@ function RemoveEventsWithNameResource(nameResource)
     end
 end
 
---Register event
---Return true if event is registered, false if is not
+---Return true if event is registered, false if is not
+---@param identifier string
+---@param eventName string
+---@param cb function
+---@return boolean
 function On(identifier, eventName, cb)
     local invokingName = GetInvokingResource()
     eventName = string.lower(eventName)
@@ -52,8 +55,10 @@ function On(identifier, eventName, cb)
     return true
 end
 
---Call event
---@internal
+---Call event
+---@param identifier string
+---@param eventName string
+---@param ... any
 function CallOn(identifier, eventName, ...)
     if ValidateInvokingEvent(identifier, eventName) then
         for key, value in pairs(Events[identifier][eventName]) do

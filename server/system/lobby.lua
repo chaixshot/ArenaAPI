@@ -4,14 +4,14 @@ function UpdateLobbies()
     for k, v in pairs(ArenaList) do
         if IsArenaActive(k) then
             if v.MinimumCapacity - 1 < v.CurrentCapacity then
-                v.MaximumLobbyTime = v.MaximumLobbyTime - 1
+                v.MaximumLobbyTime -= 1
                 if v.MaximumLobbyTime == 0 then
                     v.MaximumLobbyTime = v.MaximumLobbyTimeSaved
 
                     v.ArenaState = "ArenaBusy"
-					
-					TriggerClientEvent("ArenaAPI:sendStatus", -1, "start", GetDefaultDataFromArena(k))
-					
+
+                    TriggerClientEvent("ArenaAPI:sendStatus", -1, "start", GetDefaultDataFromArena(k))
+
                     CallOn(k, "start", v)
 
                     if v.OwnWorld then
@@ -38,11 +38,11 @@ function UpdateArenaGame()
     for k, v in pairs(ArenaList) do
         if IsArenaBusy(k) then
             if v.MaximumArenaTime then
-                v.MaximumArenaTime = v.MaximumArenaTime - 1
+                v.MaximumArenaTime -= 1
                 if v.MaximumArenaTime == 0 then
                     v.MaximumArenaTime = v.MaximumArenaTimeSaved
                     if v.CurrentRound then
-                        v.CurrentRound = v.CurrentRound - 1
+                        v.CurrentRound -= 1
                         if v.CurrentRound == -1 then
                             GetArenaInstance(k).Reset()
                             TriggerClientEvent("ArenaAPI:sendStatus", -1, "end", GetDefaultDataFromArena(k))

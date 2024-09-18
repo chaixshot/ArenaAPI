@@ -1,63 +1,87 @@
+---comment
+---@return table List of arena in activate
 function GetArenaList()
     return ArenaData
 end
-exports("GetArenaList", GetArenaList)
 
+---Get arena instant
+---@param identifier string Arena identifier
+---@return table Arena instant
 function GetArena(identifier)
     return ArenaData[identifier]
 end
-exports("GetArena", GetArena)
 
+---comment
+---@param identifier string Arena identifier
+---@return boolean?
 function DoesArenaExists(identifier)
     return ArenaData[identifier] ~= nil
 end
-exports("DoesArenaExists", DoesArenaExists)
 
+---comment
+---@param identifier string Arena identifier
+---@return table List of player in arena
 function GetPlayerList(identifier)
     return ArenaData[identifier] and ArenaData[identifier].PlayerList or {}
 end
-exports("GetPlayerList", GetPlayerList)
 
+---comment
+---@return boolean?
 function IsPlayerInAnyArena()
-    return PlayerData.CurrentArena ~= "none"
+    return PlayerData.ArenaIdentifier ~= "none"
 end
-exports("IsPlayerInAnyArena", IsPlayerInAnyArena)
 
+---comment
+---@param identifier string Arena identifier
+---@return boolean?
 function IsArenaBusy(identifier)
     return ArenaData[identifier] and ArenaData[identifier].ArenaState == "ArenaBusy" or false
 end
-exports("IsArenaBusy", IsArenaBusy)
 
+---comment
+---@return table Player list
 function GetPlayerListArena()
     return PlayerList
 end
-exports("GetPlayerListArena", GetPlayerListArena)
 
-function IsPlayerInArena(arena)
-    return PlayerData.CurrentArena == arena
+---comment
+---@param identifier string Arena identifier
+---@return boolean?
+function IsPlayerInArena(identifier)
+    return PlayerData.ArenaIdentifier == identifier
 end
-exports("IsPlayerInArena", IsPlayerInArena)
 
+---comment
+---@param identifier string Arena identifier
+---@return string
 function GetArenaLabel(identifier)
     return GetCurrentArenaData(identifier).ArenaLabel
 end
-exports("GetArenaLabel", GetArenaLabel)
 
+---comment
+---@param identifier string Arena identifier
+---@return integer
 function GetArenaMaximumSize(identifier)
     return GetCurrentArenaData(identifier).MaximumCapacity
 end
-exports("GetArenaMaximumSize", GetArenaMaximumSize)
 
+---comment
+---@param identifier string Arena identifier
+---@return integer
 function GetArenaMinimumSize(identifier)
     return GetCurrentArenaData(identifier).MinimumCapacity
 end
-exports("GetArenaMinimumSize", GetArenaMinimumSize)
 
+---comment
+---@param identifier string Arena identifier
+---@return integer
 function GetArenaCurrentSize(identifier)
     return GetCurrentArenaData(identifier).CurrentCapacity
 end
-exports("GetArenaCurrentSize", GetArenaCurrentSize)
 
+---comment
+---@param identifier string Arena identifier
+---@return table [identifier, label, maximumCapacity, minimumCapacity, currentCapacity]
 function GetCurrentArenaData(identifier)
     return {
         ArenaIdentifier = ArenaData[identifier].ArenaIdentifier,
@@ -67,14 +91,31 @@ function GetCurrentArenaData(identifier)
         CurrentCapacity = ArenaData[identifier].CurrentCapacity,
     }
 end
-exports("GetCurrentArenaData", GetCurrentArenaData)
 
+---comment
+---@return string Current player arena identifier
 function GetCurrentArenaIdentifier()
-    return PlayerData.CurrentArena
+    return PlayerData.ArenaIdentifier
 end
-exports("GetCurrentArenaIdentifier", GetCurrentArenaIdentifier)
 
+---comment
+---@return string Current player arena identifier
 function GetPlayerArena()
-    return PlayerData.CurrentArena
+    return PlayerData.ArenaIdentifier
 end
+
+exports("GetArena", GetArena)
+exports("GetArenaList", GetArenaList)
+exports("DoesArenaExists", DoesArenaExists)
+exports("GetPlayerList", GetPlayerList)
+exports("IsPlayerInAnyArena", IsPlayerInAnyArena)
+exports("IsArenaBusy", IsArenaBusy)
+exports("GetPlayerListArena", GetPlayerListArena)
+exports("IsPlayerInArena", IsPlayerInArena)
+exports("GetArenaLabel", GetArenaLabel)
+exports("GetArenaMaximumSize", GetArenaMaximumSize)
+exports("GetArenaMinimumSize", GetArenaMinimumSize)
+exports("GetArenaCurrentSize", GetArenaCurrentSize)
+exports("GetCurrentArenaData", GetCurrentArenaData)
+exports("GetCurrentArenaIdentifier", GetCurrentArenaIdentifier)
 exports("GetPlayerArena", GetPlayerArena)

@@ -3,7 +3,7 @@ lua54 'yes'
 game 'gta5'
 -- use_fxv2_oal 'yes'
 
-version '2.5.1'
+version '2.5.2'
 
 client_scripts {
     "client/2way.lua",
@@ -26,9 +26,9 @@ shared_scripts {
 }
 
 files {
-    "html/*.html",
-    "html/css/*.css",
-    "html/scripts/*.js",
+    "client/ui/*.html",
+    "client/ui/css/*.css",
+    "client/ui/scripts/*.js",
 }
 
-ui_page "html/index.html"
+ui_page "client/ui/index.html"

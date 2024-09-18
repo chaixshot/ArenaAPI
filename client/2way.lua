@@ -5,13 +5,16 @@ function Tools.newIDGenerator()
     r:construct()
     return r
 end
+
 function IDGenerator:construct()
     self:clear()
 end
+
 function IDGenerator:clear()
     self.max = 0
     self.ids = {}
 end
+
 function IDGenerator:gen()
     if #self.ids > 0 then
         return table.remove(self.ids)
@@ -21,6 +24,7 @@ function IDGenerator:gen()
         return r
     end
 end
+
 function IDGenerator:free(id)
     table.insert(self.ids,id)
 end
@@ -39,9 +43,9 @@ local function Tunnel_Resolve(itable,key)
         if type(callback) == "function" then
             local rid = ids:gen()
             callbacks[rid] = callback
-            TriggerServerEvent(iname..":tunnel_request", key, args, GetCurrentResourceName(), identifier, rid)
+            TriggerLatentServerEvent(iname..":tunnel_request", -1, key, args, GetCurrentResourceName(), identifier, rid)
         else
-            TriggerServerEvent(iname..":tunnel_request", key, args, GetCurrentResourceName(), "", -1)
+            TriggerLatentServerEvent(iname..":tunnel_request", -1, key, args, GetCurrentResourceName(), "", -1)
         end
     end
 
@@ -51,7 +55,7 @@ end
 
 function Tunnel.BindeInherFaced(name,interface)
     RegisterNetEvent(name..":tunnel_request")
-    AddEventHandler(name..":tunnel_request",function(args, member, identifier, rid)
+    AddEventHandler(name..":tunnel_request", function(args, member, identifier, rid)
         local f = interface[member]
         local delayed = false
         local rets = {}
@@ -61,14 +65,14 @@ function Tunnel.BindeInherFaced(name,interface)
                 return function(rets)
                     rets = rets or {}
                     if rid >= 0 then
-                        TriggerServerEvent(name..":"..identifier..":tunnel_request", rid, rets, GetCurrentResourceName())
+                        TriggerLatentServerEvent(name..":"..identifier..":tunnel_request", -1, rid, rets, GetCurrentResourceName())
                     end
                 end
             end
             rets = {f(table.unpack(args))} 
         end
         if not delayed and rid >= 0 then
-            TriggerServerEvent(name..":"..identifier..":tunnel_request", rid, rets, GetCurrentResourceName())
+            TriggerLatentServerEvent(name..":"..identifier..":tunnel_request", -1, rid, rets, GetCurrentResourceName())
         end
     end)
 end
@@ -78,7 +82,7 @@ function Tunnel.GedInthrFaced(name,identifier)
     local callbacks = {}
     local r = setmetatable({},{ __index = Tunnel_Resolve, name = name, tunnel_ids = ids, tunnel_callbacks = callbacks, identifier = identifier })
     RegisterNetEvent(name..":"..identifier..":tunnel_request")
-    AddEventHandler(name..":"..identifier..":tunnel_request",function(args, rid)
+    AddEventHandler(name..":"..identifier..":tunnel_request", function(args, rid)
         local callback = callbacks[rid]
         if callback ~= nil then
             ids:free(rid)
@@ -112,7 +116,7 @@ local function Proxy_Resolve(itable,key)
 end
 
 function Proxy.AddInthrFaced(name, itable)
-    AddEventHandler(name..":proxy_request",function(member, args, callback)
+    AddEventHandler(name..":proxy_request", function(member, args, callback)
         local f = itable[member]
         if type(f) == "function" then
             callback({f(table.unpack(args))})

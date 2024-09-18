@@ -1,17 +1,17 @@
-function CooldownPlayer(source, arena, time)
-    CooldownPlayers[source][arena] = os.time(os.date("!*t")) + time
+function CooldownPlayer(source, identifier, time)
+    CooldownPlayers[source][identifier] = os.time(os.date("!*t")) + time
 end
 
-function IsPlayerInCooldown(source, arena)
-    if CooldownPlayers[source][arena] == nil then return false end
-    return CooldownPlayers[source][arena] > os.time(os.date("!*t"))
+function IsPlayerInCooldown(source, identifier)
+    if CooldownPlayers[source][identifier] == nil then return false end
+    return CooldownPlayers[source][identifier] > os.time(os.date("!*t"))
 end
 
 function TimestampToString(time)
-    return os.date("%H:%M:%S", time + Config.TimeZone * 60 * 60 )
+    return os.date("%H:%M:%S", time + Config.TimeZone * 60 * 60)
 end
 
-function GetcooldownForPlayer(source, arena)
-    if CooldownPlayers[source][arena] == nil then return os.time(os.date("!*t")) end
-    return CooldownPlayers[source][arena]
+function GetcooldownForPlayer(source, identifier)
+    if CooldownPlayers[source][identifier] == nil then return os.time(os.date("!*t")) end
+    return CooldownPlayers[source][identifier]
 end

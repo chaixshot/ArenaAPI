@@ -5,17 +5,14 @@ ClaimedVirtualWorld = {}
 function CreateArena(identifier, ownersource)
     ArenaCreatorHelper(identifier)
     local arena = ArenaList[identifier]
-	
-    --------------------------------------------
     local self = {}
-    --------------------------------------------
-    -- Basic information about arena      --
-    --------------------------------------------
-	if ownersource then
-		arena.ownersource = ownersource
-		arena.ownername = GetPlayerName(ownersource)
-	end
-	
+    
+    --** Basic information about arena
+    if ownersource then
+        arena.ownersource = ownersource
+        arena.ownername = GetPlayerName(ownersource)
+    end
+
     self.SetOwnWorld = function(result)
         arena.OwnWorld = result
         if result then
@@ -40,11 +37,11 @@ function CreateArena(identifier, ownersource)
     self.GetOwnWorld = function()
         return arena.OwnWorld, arena.OwnWorldID
     end
-    --------
+
     self.RemoveWorldAfterWin = function(result)
         arena.DeleteWorldAfterWin = result
     end
-    --------
+
     self.SetMaximumCapacity = function(number)
         arena.MaximumCapacity = number
     end
@@ -52,7 +49,7 @@ function CreateArena(identifier, ownersource)
     self.GetMaximumCapacity = function()
         return arena.MaximumCapacity
     end
-    --------
+
     self.SetMinimumCapacity = function(number)
         arena.MinimumCapacity = number
     end
@@ -60,20 +57,20 @@ function CreateArena(identifier, ownersource)
     self.GetMinimumCapacity = function()
         return arena.MinimumCapacity
     end
-    --------
+
     self.GetArenaIdentifier = function()
         return arena.ArenaIdentifier
     end
-    --------
+
     self.SetArenaLabel = function(name)
         arena.ArenaLabel = name
-		TriggerClientEvent("ArenaAPI:sendStatus", -1, "updateData", ArenaList)
+        TriggerClientEvent("ArenaAPI:sendStatus", -1, "updateData", ArenaList)
     end
 
     self.GetArenaLabel = function()
         return arena.ArenaLabel
     end
-    --------
+
     self.SetArenaMaxRounds = function(rounds)
         if arena.MaximumRoundSaved == nil then
             arena.MaximumRoundSaved = rounds
@@ -88,12 +85,11 @@ function CreateArena(identifier, ownersource)
     self.GetCurrentRound = function()
         return arena.CurrentRound
     end
-    --------
-	
+
     self.SetShowArenaTime = function(show)
         arena.ShowArenaTime = show
     end
-	
+
     self.SetMaximumArenaTime = function(second)
         arena.MaximumArenaTime = second
         arena.MaximumArenaTimeSaved = second
@@ -102,7 +98,7 @@ function CreateArena(identifier, ownersource)
     self.GetMaximumArenaTime = function()
         return arena.MaximumArenaTimeSaved
     end
-    --------
+
     self.SetMaximumLobbyTime = function(second)
         arena.MaximumLobbyTime = second
         arena.MaximumLobbyTimeSaved = second
@@ -111,152 +107,148 @@ function CreateArena(identifier, ownersource)
     self.GetMaximumLobbyTime = function()
         return arena.MaximumLobbyTimeSaved, arena.MaximumLobbyTime
     end
-    --------
+
     self.SetArenaPublic = function(value)
         arena.ArenaIsPublic = value
     end
-	
+
     self.SetArenaImageUrl = function(value)
         arena.ArenaImageUrl = value
     end
-	
+
     self.GetArenaImageUrl = function(value)
-		return arena.ArenaImageUrl
+        return arena.ArenaImageUrl
     end
 
     self.IsArenaPublic = function()
         return arena.ArenaIsPublic
     end
-	
-	self.SetJoinAfterStart = function(value)
+
+    self.SetJoinAfterStart = function(value)
         arena.CanJoinAfterStart = value
-		TriggerClientEvent("ArenaAPI:sendStatus", -1, "updateData", ArenaList)
+        TriggerClientEvent("ArenaAPI:sendStatus", -1, "updateData", ArenaList)
     end
-	
-	self.SetPassword = function(value)
+
+    self.SetPassword = function(value)
         arena.Password = value
     end
-	
-    --------------------------------------------
-    -- Adding player into arena logic     --
-    --------------------------------------------
+
+    --** Adding player into arena logic
     self.AddPlayer = function(source, AfterArenaStart)
         if arena.PlayerList[source] == nil then
             PlayerInfo[source] = arena.ArenaIdentifier
-            arena.PlayerList[source] = {name=GetPlayerName(source)}
+            arena.PlayerList[source] = {name = GetPlayerName(source)}
             arena.PlayerScoreList[source] = {}
             arena.PlayerNameList[source] = GetPlayerName(source)
             arena.PlayerAvatar[source] = GetSteamAvatar(source)
-            arena.CurrentCapacity = arena.CurrentCapacity + 1
-			
-			local data = GetDefaultDataFromArena(arena.ArenaIdentifier)
-			CallOn(identifier, "join", source, data)
-			if not AfterArenaStart then
-				arena.MaximumLobbyTime = arena.MaximumLobbyTimeSaved
-				arena.ArenaState = "ArenaActive"
-			else
-				data.JoinAfterArenaStart = true
-                SetPlayerRoutingBucket(source, ArenaList[identifier].OwnWorldID)
-			end
-			TriggerClientEvent("ArenaAPI:sendStatus", -1, "updateData", ArenaList)
-			TriggerClientEvent("ArenaAPI:sendStatus", source, "join", data)
-			for k,v in pairs(arena.PlayerList) do
-				TriggerClientEvent("ArenaAPI:sendStatus", k, "updatePlayerList", data)
-			end
-        end
-    end
-    --------
-    self.RemovePlayer = function(source, skipEvent)
-        -- if arena.PlayerList[source] ~= nil then
-            if arena.DeleteWorldAfterWin then
-                SetPlayerRoutingBucket(source, 0)
-            end
-
-            PlayerInfo[source] = "none"
-            arena.PlayerList[source] = nil
-			arena.PlayerAvatar[source] = nil
-            arena.PlayerScoreList[source] = nil
-            arena.PlayerNameList[source] = nil
-			
-			if arena.ownersource == source then
-				for k,v in pairs(arena.PlayerList) do
-					arena.ownersource = k
-					arena.ownername = GetPlayerName(k)
-					break
-				end
-			end
-
-            arena.CurrentCapacity = arena.CurrentCapacity - 1
-            if arena.CurrentCapacity == 0 then
-                arena.ArenaState = "ArenaInactive"
-            end
+            arena.CurrentCapacity += 1
 
             local data = GetDefaultDataFromArena(arena.ArenaIdentifier)
-            arena.MaximumLobbyTime = arena.MaximumLobbyTimeSaved
-
+            CallOn(identifier, "join", source, data)
+            if not AfterArenaStart then
+                arena.MaximumLobbyTime = arena.MaximumLobbyTimeSaved
+                arena.ArenaState = "ArenaActive"
+            else
+                data.JoinAfterArenaStart = true
+                SetPlayerRoutingBucket(source, ArenaList[identifier].OwnWorldID)
+            end
             TriggerClientEvent("ArenaAPI:sendStatus", -1, "updateData", ArenaList)
-            if skipEvent == nil then
-				CallOn(identifier, "leave", source, data)
-				TriggerClientEvent("ArenaAPI:sendStatus", source, "leave", data)
-				for k,v in pairs(arena.PlayerList) do
-					TriggerClientEvent("ArenaAPI:sendStatus", k, "updatePlayerList", data)
-				end
-			end
+            TriggerClientEvent("ArenaAPI:sendStatus", source, "join", data)
+            for k, v in pairs(arena.PlayerList) do
+                TriggerClientEvent("ArenaAPI:sendStatus", k, "updatePlayerList", data)
+            end
+        end
+    end
+
+    self.RemovePlayer = function(source, skipEvent)
+        -- if arena.PlayerList[source] ~= nil then
+        if arena.DeleteWorldAfterWin then
+            SetPlayerRoutingBucket(source, 0)
+        end
+
+        PlayerInfo[source] = "none"
+        arena.PlayerList[source] = nil
+        arena.PlayerAvatar[source] = nil
+        arena.PlayerScoreList[source] = nil
+        arena.PlayerNameList[source] = nil
+
+        if arena.ownersource == source then
+            for k, v in pairs(arena.PlayerList) do
+                arena.ownersource = k
+                arena.ownername = GetPlayerName(k)
+                break
+            end
+        end
+
+        arena.CurrentCapacity -= 1
+        if arena.CurrentCapacity == 0 then
+            arena.ArenaState = "ArenaInactive"
+        end
+
+        local data = GetDefaultDataFromArena(arena.ArenaIdentifier)
+        arena.MaximumLobbyTime = arena.MaximumLobbyTimeSaved
+
+        TriggerClientEvent("ArenaAPI:sendStatus", -1, "updateData", ArenaList)
+        if skipEvent == nil then
+            CallOn(identifier, "leave", source, data)
+            TriggerClientEvent("ArenaAPI:sendStatus", source, "leave", data)
+            for k, v in pairs(arena.PlayerList) do
+                TriggerClientEvent("ArenaAPI:sendStatus", k, "updatePlayerList", data)
+            end
+        end
         -- end
     end
-    --------
+
     self.GetPlayerList = function()
         return arena.PlayerList
     end
-    --------
+
     self.IsPlayerInArena = function(source)
         return arena.PlayerList[source] ~= nil
     end
-    --------------------------------------------
-    -- Setting player score logic       --
-    --------------------------------------------
+
+    --** Setting player score logic
     self.SetPlayerScore = function(source, key, value)
         arena.PlayerScoreList[source][key] = value
     end
-    --------
+
     self.GetPlayerScore = function(source, key)
         return arena.PlayerScoreList[source][key]
     end
-    --------
+
     self.GivePlayerScore = function(source, key, value)
         arena.PlayerScoreList[source][key] = arena.PlayerScoreList[source][key] + value
     end
-    --------
+
     self.RemovePlayerScore = function(source, key, value)
         arena.PlayerScoreList[source][key] = arena.PlayerScoreList[source][key] - value
     end
-    --------
+
     self.PlayerScoreExists = function(source, key)
         return arena.PlayerScoreList[source][key] ~= nil
     end
-    --------
+
     self.DeleteScore = function(source, key)
         arena.PlayerScoreList[source][key] = nil
     end
-    --------------------------------------------
-    -- Basic manipulation arena        --
-    --------------------------------------------
+
+    --** Basic manipulation arena
     self.Destroy = function(notcall)
-		if not notcall then
-			CallOn(identifier, "end", arena)
-		end
+        if not notcall then
+            CallOn(identifier, "end", arena)
+        end
 
         for k, v in pairs(arena.PlayerList) do
             self.RemovePlayer(k, true)
         end
-		if ArenaList[identifier] then
-			ClaimedVirtualWorld[ArenaList[identifier].OwnWorldID] = nil
-		end
+        if ArenaList[identifier] then
+            ClaimedVirtualWorld[ArenaList[identifier].OwnWorldID] = nil
+        end
         TriggerClientEvent("ArenaAPI:sendStatus", -1, "end", GetDefaultDataFromArena(arena.ArenaIdentifier))
         ArenaList[identifier] = nil
-		TriggerClientEvent("ArenaAPI:sendStatus", -1, "updateData", ArenaList)
+        TriggerClientEvent("ArenaAPI:sendStatus", -1, "updateData", ArenaList)
     end
-    --------
+
     self.Reset = function()
         CallOn(identifier, "end", arena)
 
@@ -264,9 +256,9 @@ function CreateArena(identifier, ownersource)
             self.RemovePlayer(k, true)
         end
 
-		if ArenaList[identifier] then
-			ClaimedVirtualWorld[ArenaList[identifier].OwnWorldID] = nil
-		end
+        if ArenaList[identifier] then
+            ClaimedVirtualWorld[ArenaList[identifier].OwnWorldID] = nil
+        end
 
         arena.PlayerList = {}
         arena.PlayerScoreList = {}
@@ -274,11 +266,10 @@ function CreateArena(identifier, ownersource)
 
         arena.MaximumArenaTime = arena.MaximumArenaTimeSaved
         arena.CurrentRound = arena.MaximumRoundSaved
-		TriggerClientEvent("ArenaAPI:sendStatus", -1, "updateData", ArenaList)
+        TriggerClientEvent("ArenaAPI:sendStatus", -1, "updateData", ArenaList)
     end
-    --------------------------------------------
-    -- Basic events for arena         --
-    --------------------------------------------
+
+    --** Basic events for arena
     self.OnPlayerJoinLobby = function(cb, test)
         return On(identifier, "join", cb)
     end
@@ -302,9 +293,8 @@ function CreateArena(identifier, ownersource)
     self.On = function(eventName, cb)
         return On(identifier, eventName, cb)
     end
-    --------------------------------------------
-	
-	TriggerClientEvent("ArenaAPI:sendStatus", -1, "updateData", ArenaList)
+
+    TriggerClientEvent("ArenaAPI:sendStatus", -1, "updateData", ArenaList)
     return self
 end
 

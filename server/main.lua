@@ -1,76 +1,77 @@
 -- vRP TUNNEL/PROXY
 vRPBs = {}
-Tunnel.BindeInherFaced("ArenaAPI",vRPBs)
-Proxy.AddInthrFaced("ArenaAPI",vRPBs)
+Tunnel.BindeInherFaced("ArenaAPI", vRPBs)
+Proxy.AddInthrFaced("ArenaAPI", vRPBs)
 BSClients = Tunnel.GedInthrFaced("ArenaAPI", "ArenaAPI")
 
 ArenaList = {}
 PlayerInfo = {}
 CooldownPlayers = {}
 WorldCount = 0
-----------------------------------------
+
+local AvatarCache = {}
+local Admin = {
+	["steam:11000010971396e"] = true,
+}
+
 function ArenaCreatorHelper(identifier)
-    if ArenaList[identifier] ~= nil then return ArenaList[identifier] end
-    ArenaList[identifier] = {
-        MaximumCapacity = 0,
-        MinimumCapacity = 0,
-        CurrentCapacity = 0,
-        -----
-        MaximumRoundSaved = nil,
-        CurrentRound = nil,
-        -----
-        DeleteWorldAfterWin = true,
-        OwnWorld = false,
-        OwnWorldID = 0,
-        -----
-        ArenaLabel = "",
-        ArenaIdentifier = identifier,
-        -----
-        MaximumArenaTime = nil,
-        MaximumArenaTimeSaved = nil,
-        MaximumLobbyTimeSaved = 30,
-        MaximumLobbyTime = 30,
-        -----
-        ArenaIsPublic = true,
-        ArenaImageUrl = nil,
+	if ArenaList[identifier] ~= nil then return ArenaList[identifier] end
+	ArenaList[identifier] = {
+		MaximumCapacity = 0,
+		MinimumCapacity = 0,
+		CurrentCapacity = 0,
+
+		MaximumRoundSaved = nil,
+		CurrentRound = nil,
+
+		DeleteWorldAfterWin = true,
+		OwnWorld = false,
+		OwnWorldID = 0,
+
+		ArenaLabel = "",
+		ArenaIdentifier = identifier,
+
+		MaximumArenaTime = nil,
+		MaximumArenaTimeSaved = nil,
+		MaximumLobbyTimeSaved = 30,
+		MaximumLobbyTime = 30,
+
+		ArenaIsPublic = true,
+		ArenaImageUrl = nil,
 		CanJoinAfterStart = false,
 		Password = "",
-        -----
-        PlayerList = {},
-        PlayerScoreList = {},
-        PlayerNameList = {},
-        PlayerAvatar = {},
-        -----
-        ArenaState = "ArenaInactive",
-        -----
-    }
 
-    return ArenaList[identifier]
+		PlayerList = {},
+		PlayerScoreList = {},
+		PlayerNameList = {},
+		PlayerAvatar = {},
+
+		ArenaState = "ArenaInactive",
+	}
+
+	return ArenaList[identifier]
 end
 
 function GetDefaultDataFromArena(identifier)
-    return ArenaCreatorHelper(identifier)
+	return ArenaCreatorHelper(identifier)
 end
 
 function SendMessage(source, msg)
 	TriggerClientEvent("ArenaAPI:ShowNotification", source, msg)
 end
 
-local Admin = {
-	["steam:11000010971396e"] = true,
-}
 RegisterCommand("minigame", function(source, args, rawCommand)
-    if args[1] == "join" then
-        local arenaName = args[2]
-        if not IsPlayerInAnyArena(source) then
-            if DoesArenaExists(arenaName) then
-                local arenaInfo = GetDefaultDataFromArena(arenaName)
-                local arena = GetArenaInstance(arenaName)
-                if arena.IsArenaPublic() then
+	if args[1] == "join" then
+		local arenaIdentifier = args[2]
+		if not IsPlayerInAnyArena(source) then
+			if DoesArenaExists(arenaIdentifier) then
+				local arenaInfo = GetDefaultDataFromArena(arenaIdentifier)
+				local arena = GetArenaInstance(arenaIdentifier)
+				if arena.IsArenaPublic() then
 					local _, CurrentLobbyTime = arena.GetMaximumLobbyTime()
-                    if not IsArenaBusy(arenaName) and CurrentLobbyTime > 1 then
-                        if arenaInfo.MaximumCapacity > arenaInfo.CurrentCapacity then
-                            if not IsPlayerInCooldown(source, arenaName) then
+					if not IsArenaBusy(arenaIdentifier) and CurrentLobbyTime > 1 then
+						if arenaInfo.MaximumCapacity > arenaInfo.CurrentCapacity then
+							if not IsPlayerInCooldown(source, arenaIdentifier) then
 								if arenaInfo.Password == "" or Admin[GetIdentifier(source)] then
 									arena.MaximumLobbyTime = arena.MaximumLobbyTimeSaved
 									GetArenaInstance(args[2]).AddPlayer(source)
@@ -78,21 +79,20 @@ RegisterCommand("minigame", function(source, args, rawCommand)
 									BSClients.ClientTypePassword(source, {}, function(password)
 										if arenaInfo.Password == password then
 											arena.MaximumLobbyTime = arena.MaximumLobbyTimeSaved
-											
+
 											GetArenaInstance(args[2]).AddPlayer(source)
 										else
 											SendMessage(source, "~r~Incorrect Password.")
 										end
 									end)
 								end
-                            else
-                                SendMessage(source, string.format(Config.MessageList["cooldown_to_join"], TimestampToString(GetcooldownForPlayer(source, arenaName))))
-                            end
-                        else
-                            SendMessage(source, Config.MessageList["maximum_people"])
-                        end
-						
-                    else
+							else
+								SendMessage(source, string.format(Config.MessageList["cooldown_to_join"], TimestampToString(GetcooldownForPlayer(source, arenaIdentifier))))
+							end
+						else
+							SendMessage(source, Config.MessageList["maximum_people"])
+						end
+					else
 						if arenaInfo.CanJoinAfterStart then
 							if arenaInfo.Password == "" or Admin[GetIdentifier(source)] then
 								GetArenaInstance(args[2]).AddPlayer(source, true)
@@ -108,27 +108,27 @@ RegisterCommand("minigame", function(source, args, rawCommand)
 						else
 							SendMessage(source, Config.MessageList["arena_busy"])
 						end
-                    end
-                else
-                    SendMessage(source, Config.MessageList["cant_acces_this_arena"])
-                end
-            else
-                SendMessage(source, Config.MessageList["arena_doesnt_exists"])
-            end
-        end
-    end
-    if args[1] == "leave" then
-        if IsPlayerInAnyArena(source) then
-            local arenaName = GetPlayerArena(source)
-            if DoesArenaExists(arenaName) then
-                local arena = GetArenaInstance(arenaName)
-                CooldownPlayer(source, arenaName, Config.TimeCooldown)
-                arena.MaximumLobbyTime = arena.MaximumLobbyTimeSaved
+					end
+				else
+					SendMessage(source, Config.MessageList["cant_acces_this_arena"])
+				end
+			else
+				SendMessage(source, Config.MessageList["arena_doesnt_exists"])
+			end
+		end
+	end
+	if args[1] == "leave" then
+		if IsPlayerInAnyArena(source) then
+			local arenaIdentifier = GetPlayerArena(source)
+			if DoesArenaExists(arenaIdentifier) then
+				local arena = GetArenaInstance(arenaIdentifier)
+				CooldownPlayer(source, arenaIdentifier, Config.TimeCooldown)
+				arena.MaximumLobbyTime = arena.MaximumLobbyTimeSaved
 
-                GetArenaInstance(arenaName).RemovePlayer(source)
-            end
-        end
-    end
+				GetArenaInstance(arenaIdentifier).RemovePlayer(source)
+			end
+		end
+	end
 end, false)
 
 ---Convert string to table by @sep
@@ -141,7 +141,7 @@ function string.split(inputstr, sep)
 	end
 	local t = {}
 	local i = 1
-	for str in string.gmatch(inputstr or "", "([^" .. sep .. "]+)") do
+	for str in string.gmatch(inputstr or "", "([^"..sep.."]+)") do
 		t[i] = str
 		i += 1
 	end
@@ -149,9 +149,9 @@ function string.split(inputstr, sep)
 end
 
 function GetIdentifier(source)
-	local source = source
+	local _source = source
 	local steamid = "none"
-	for k,v in pairs(GetPlayerIdentifiers(source)) do
+	for k, v in pairs(GetPlayerIdentifiers(_source)) do
 		if string.sub(v, 1, string.len("steam:")) == "steam:" then
 			steamid = v
 		end
@@ -159,7 +159,10 @@ function GetIdentifier(source)
 	return steamid or ""
 end
 
-local AvatarCache = {}
+---@async
+---comment
+---@param source integer Player server id
+---@return string Steam image url
 function GetSteamAvatar(source)
 	local steamid = "none"
 	for k, v in pairs(GetPlayerIdentifiers(source)) do
@@ -183,7 +186,7 @@ function GetSteamAvatar(source)
 		avaterurl:resolve(nil)
 	end)
 
-	PerformHttpRequest('https://steamcommunity.com/profiles/' .. steamIDInt .. '/?xml=1', function(Error, Content, Head)
+	PerformHttpRequest('https://steamcommunity.com/profiles/'..steamIDInt..'/?xml=1', function(Error, Content, Head)
 		if Content then
 			local SteamProfileSplitted = string.split(Content, '\n')
 
@@ -195,7 +198,7 @@ function GetSteamAvatar(source)
 					break
 				end
 			end
-			
+
 			avaterurl:resolve(nil)
 		end
 	end)
@@ -211,9 +214,10 @@ end
 
 Citizen.CreateThread(function()
 	Citizen.Wait(2000)
+
 	local resourceName = GetCurrentResourceName()
 	local currentVersion = GetResourceMetadata(resourceName, "version", 0)
-	PerformHttpRequest("https://api.github.com/repos/chaixshot/ArenaAPI/releases/latest", function (errorCode, resultData, resultHeaders)
+	PerformHttpRequest("https://api.github.com/repos/chaixshot/ArenaAPI/releases/latest", function(errorCode, resultData, resultHeaders)
 		if errorCode == 200 then
 			local data = json.decode(resultData)
 			if currentVersion ~= data.name then

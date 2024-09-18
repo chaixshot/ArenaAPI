@@ -10,7 +10,7 @@ RegisterNetEvent("ArenaAPI:PlayerJoinedFivem")
 AddEventHandler("ArenaAPI:PlayerJoinedFivem", function()
     TriggerClientEvent("ArenaAPI:sendStatus", source, "updateData", ArenaList)
     PlayerInfo[source] = "none"
-    CooldownPlayers[source] = { }
+    CooldownPlayers[source] = {}
 end)
 
 AddEventHandler('onResourceStop', function(resourceName)

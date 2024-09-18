@@ -1,13 +1,13 @@
-*{
+* {
 	background-color: rgba(0, 0, 0, 0);
 	user-select: none; /* supported by Chrome and Opera */
-   -webkit-user-select: none; /* Safari */
-   -khtml-user-select: none; /* Konqueror HTML */
-   -moz-user-select: none; /* Firefox */
-   -ms-user-select: none; /* Internet Explorer/Edge */
+	-webkit-user-select: none; /* Safari */
+	-khtml-user-select: none; /* Konqueror HTML */
+	-moz-user-select: none; /* Firefox */
+	-ms-user-select: none; /* Internet Explorer/Edge */
 }
 
-body{
+body {
 	background-color: rgba(0, 0, 0, 0);
 	font-size: 0.5vw;
 }
@@ -22,12 +22,12 @@ body{
 	position: relative;
 	top: 0;
 	left: 0;
-	width:100%;
+	width: 100%;
 	border-radius: 5px;
 }
 
 .image2 {
-	width:40%;
+	width: 40%;
 	position: absolute;
 	top: 0;
 	right: 0;
@@ -36,13 +36,13 @@ body{
 	box-shadow: 0 2px 5px 0 rgb(0 0 0 / 36%), 0 2px 10px 0 rgb(0 0 0 / 32%) !important;
 }
 
-.box{
-    background-color: rgba(255, 255, 255, 0.8);
-    color: #3a3a3a;
-    text-align: left;
-    padding-right: 0.352vw;
-    padding-top: 0.195vw;
-    padding-bottom: 0.195vw;
+.box {
+	background-color: rgba(255, 255, 255, 0.8);
+	color: #3a3a3a;
+	text-align: left;
+	padding-right: 0.352vw;
+	padding-top: 0.195vw;
+	padding-bottom: 0.195vw;
 	padding-left: 0.195vw;
 	text-shadow: 0.039vw 0.078vw 0.156vw rgb(0 0 0 / 60%);
 }
@@ -70,7 +70,7 @@ body{
 	top: 83%;
 	left: 50%;
 	transform: translate(-50%, -50%);
-	font-size:1vw;
+	font-size: 1vw;
 	font-weight: bold;
 	text-shadow: 0.039vw 0.078vw 0.156vw rgb(0 0 0 / 60%);
 }
