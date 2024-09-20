@@ -65,10 +65,7 @@ function GetPlayerCount(identifier)
 end
 
 ---@param identifier string Arena identifier
----@return string State of arena
----ArenaInactive - No one is in a lobby or arena
----ArenaActive - People are in lobby
----ArenaBusy - People playing already
+---@return string AtenaState <br>ArenaInactive - No one is in a lobby or arena<br>ArenaActive - People are in lobby<br>ArenaBusy - People playing already
 function GetArenaState(identifier)
     return ArenaList[identifier].ArenaState
 end

@@ -53,7 +53,7 @@ $(function(){
             for (var index in item.Names) {
 			    $(".players").append("<div class='col-3 mb-4'><img class='avatar' src='"+item.Names[index].avatar+"'> " + item.Names[index].name + "</div>")
 			}
-			$(".playercount").text(item.Names.length)
+			$(".playerCount").text(item.Names.length)
 		}
 	})
 });

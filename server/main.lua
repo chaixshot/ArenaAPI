@@ -87,7 +87,7 @@ RegisterCommand("minigame", function(source, args, rawCommand)
 									end)
 								end
 							else
-								SendMessage(source, string.format(Config.MessageList["cooldown_to_join"], TimestampToString(GetcooldownForPlayer(source, arenaIdentifier))))
+								SendMessage(source, string.format(Config.MessageList["cooldown_to_join"], TimestampToString(GetCooldownForPlayer(source, arenaIdentifier))))
 							end
 						else
 							SendMessage(source, Config.MessageList["maximum_people"])
@@ -148,68 +148,72 @@ function string.split(inputstr, sep)
 	return t
 end
 
+---Get steam or license
+---@param source integer Player server id
+---@return string
 function GetIdentifier(source)
 	local _source = source
-	local steamid = "none"
-	for k, v in pairs(GetPlayerIdentifiers(_source)) do
+	local Identifier = "none"
+    
+	for k,v in pairs(GetPlayerIdentifiers(_source)) do
 		if string.sub(v, 1, string.len("steam:")) == "steam:" then
-			steamid = v
+			Identifier = v
 		end
 	end
-	return steamid or ""
+    
+	if Identifier == "none" then
+		for k,v in pairs(GetPlayerIdentifiers(_source)) do
+			if string.sub(v, 1, string.len("license:")) == "license:" then
+				Identifier = v
+			end
+		end
+		return Identifier
+	else
+		return Identifier
+	end
 end
 
 ---@async
----comment
+---Get player steam avatar url
 ---@param source integer Player server id
----@return string Steam image url
+---@return string avatarUrl
 function GetSteamAvatar(source)
-	local steamid = "none"
-	for k, v in pairs(GetPlayerIdentifiers(source)) do
-		if string.sub(v, 1, string.len("steam:")) == "steam:" then
-			steamid = v
-		end
-	end
+	local defaultUrl = "https://avatars.steamstatic.com/f8de58eb18a0cad87270ef1d1250c574498577fc_full.jpg"
+	local steamID = GetIdentifier(source)
+	local steamIDInt = tonumber(string.sub(steamID, 7), 16)
 
-	if AvatarCache[steamid] then
-		return AvatarCache[steamid]
+	if AvatarCache[steamID] then
+		return AvatarCache[steamID]
 	end
-
-	local steamIDInt = tonumber(string.sub(steamid, 7), 16)
-	local avaterurl = promise.new()
 
 	if not steamIDInt then
-		return "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/avatars/f8/f8de58eb18a0cad87270ef1d1250c574498577fc_full.jpg"
+		return defaultUrl
 	end
+	
+	local avaterUrl = promise.new()
 
-	Citizen.SetTimeout(5000, function()
-		avaterurl:resolve(nil)
+	Citizen.SetTimeout(10000, function()
+		avaterUrl:resolve(defaultUrl)
 	end)
 
 	PerformHttpRequest('https://steamcommunity.com/profiles/'..steamIDInt..'/?xml=1', function(Error, Content, Head)
 		if Content then
-			local SteamProfileSplitted = string.split(Content, '\n')
+			local steamProfileSplitted = string.split(Content, '\n')
 
-			for i, Line in ipairs(SteamProfileSplitted) do
-				if Line:find('<avatarFull>') then
-					local url = Line:gsub('	<avatarFull><!%[CDATA%[', ''):gsub(']]></avatarFull>', '')
-					url = string.sub(url, 1, string.len(url) - 1)
-					avaterurl:resolve(url)
+			for _, line in ipairs(steamProfileSplitted) do
+				if line:find('<avatarFull>') then
+					local url = line:gsub('	<avatarFull><!%[CDATA%[', ''):gsub(']]></avatarFull>', '')
+					avaterUrl:resolve(string.sub(url, 1, string.len(url) - 1))
 					break
 				end
 			end
 
-			avaterurl:resolve(nil)
+			avaterUrl:resolve(defaultUrl)
 		end
 	end)
 
-	AvatarCache[steamid] = Citizen.Await(avaterurl)
-
-	if AvatarCache[steamid] then
-		return AvatarCache[steamid]
-	else
-		return "https://cdn.akamai.steamstatic.com/steamcommunity/public/images/avatars/f8/f8de58eb18a0cad87270ef1d1250c574498577fc_full.jpg"
-	end
+	AvatarCache[steamID] = Citizen.Await(avaterUrl)
+	return AvatarCache[steamID]
 end
 
 Citizen.CreateThread(function()

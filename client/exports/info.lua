@@ -81,7 +81,7 @@ end
 
 ---comment
 ---@param identifier string Arena identifier
----@return table [identifier, label, maximumCapacity, minimumCapacity, currentCapacity]
+---@return table ArenaData[identifier, label, maximumCapacity, minimumCapacity, currentCapacity]
 function GetCurrentArenaData(identifier)
     return {
         ArenaIdentifier = ArenaData[identifier].ArenaIdentifier,

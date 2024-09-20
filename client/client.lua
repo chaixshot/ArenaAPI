@@ -11,7 +11,6 @@ PlayerData = {
 	ArenaIdentifier = "none",
 }
 
--- stolen from https://scriptinghelpers.org/questions/43622/how-do-i-turn-seconds-to-minutes-and-seconds
 function DecimalsToMinutes(dec)
 	if dec then
 		local ms = tonumber(dec)
