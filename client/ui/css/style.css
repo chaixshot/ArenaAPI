@@ -9,7 +9,8 @@
 
 body {
 	background-color: rgba(0, 0, 0, 0);
-	font-size: 0.5vw;
+	font-size: 1rem;
+	overflow: hidden;
 }
 
 .parent {
@@ -55,10 +56,20 @@ body {
 	left: 50%;
 	-webkit-transform: translate(-50%, -50%);
 	transform: translate(-50%, -50%);
-	overflow: hidden;
 	z-index: 10000;
 	display: none;
 }
+
+/* jp90 */
+/* .container {
+	position: fixed;
+	top: auto;
+	left: auto;
+	bottom: 25vh;
+	right: 1vw;
+	transition: opacity 0.3s ease;
+	animation: fadeInRight 0.5s ease-out forwards;
+} */
 
 .banner {
 	box-shadow: 0 0.078vw 0.195vw 0 rgb(0 0 0 / 36%), 0 0.078vw 0.391vw 0 rgb(0 0 0 / 32%) !important;
@@ -70,7 +81,7 @@ body {
 	top: 83%;
 	left: 50%;
 	transform: translate(-50%, -50%);
-	font-size: 1vw;
+	font-size: 1.5rem;
 	font-weight: bold;
 	text-shadow: 0.039vw 0.078vw 0.156vw rgb(0 0 0 / 60%);
 }

@@ -2,15 +2,15 @@
 ClaimedVirtualWorld = {}
 
 
-function CreateArena(identifier, ownersource)
+function CreateArena(identifier, ownerSource)
     ArenaCreatorHelper(identifier)
     local arena = ArenaList[identifier]
     local self = {}
     
     --** Basic information about arena
-    if ownersource then
-        arena.ownersource = ownersource
-        arena.ownername = GetPlayerName(ownersource)
+    if ownerSource then
+        arena.ownerSource = ownerSource
+        arena.ownerName = GetPlayerName(ownerSource)
     end
 
     self.SetOwnWorld = function(result)
@@ -18,6 +18,7 @@ function CreateArena(identifier, ownersource)
         if result then
             if ArenaList[identifier].OwnWorldID == 0 then
                 local newID = 0
+
                 for i = 1, 1000 do
                     if not ClaimedVirtualWorld[i] then
                         newID = i
@@ -25,6 +26,7 @@ function CreateArena(identifier, ownersource)
                         break
                     end
                 end
+                
                 if newID == 0 then
                     print("WARNING the poolsize of virtual worlds have run out! Delete some Arena lobbies to make space!")
                 else
@@ -172,10 +174,10 @@ function CreateArena(identifier, ownersource)
         arena.PlayerScoreList[source] = nil
         arena.PlayerNameList[source] = nil
 
-        if arena.ownersource == source then
+        if arena.ownerSource == source then
             for k, v in pairs(arena.PlayerList) do
-                arena.ownersource = k
-                arena.ownername = GetPlayerName(k)
+                arena.ownerSource = k
+                arena.ownerName = GetPlayerName(k)
                 break
             end
         end

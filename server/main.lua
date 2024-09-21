@@ -226,7 +226,7 @@ Citizen.CreateThread(function()
 			local data = json.decode(resultData)
 			if currentVersion ~= data.name then
 				print("------------------------------")
-				print("Update available for ^1"..resourceName.."^0")
+				print("Update available for ^1"..resourceName.." ^3(current version: "..currentVersion..")^0")
 				print("Please update to the latest release ^2(version: "..data.name..")^0")
 				print("Check in ^3"..data.html_url.."^0")
 				print("------------------------------")

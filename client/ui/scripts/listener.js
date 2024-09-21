@@ -13,7 +13,6 @@ $(function(){
 		if (item.type === "ui"){
 			if (item.status) {
 				$(".seconds").text("Waiting for players.");
-				$(".container").show();
 				$(".container").fadeIn();		
 			} else { 
 				$(".container").fadeOut();
@@ -24,18 +23,18 @@ $(function(){
 			$(".arenaName").html(item.arenaName);
 			let map = item.arenaName.match(/\(([^)]+)\)/);
 			if(map!=null){
-				$(".map").show();
-				$(".map").attr("src","nui://ArenaLobby/html/img/games/map/"+map[1]+".jpg");
+				$(".map").fadeIn();
+				$(".map").attr("src","nui://ArenaLobby/client/ui/img/games/map/"+map[1]+".jpg");
 				$(".map").error(function () {
-					$(this).hide();
+					$(this).fadeOut();
 				});
 			}else{
-				$(".map").hide();
+				$(".map").fadeOut();
 			}
 		}
 		
 		if (item.type === "arenaImage"){
-			$(".banner").attr("src","nui://ArenaLobby/html/img/games/"+item.arenaImage+".jpg");
+			$(".banner").attr("src","nui://ArenaLobby/client/ui/img/games/"+item.arenaImage+".jpg");
 		}
 		
 		if (item.type === "arenaImageURL"){
