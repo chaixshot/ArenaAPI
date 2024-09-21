@@ -27,8 +27,8 @@ shared_scripts {
 
 files {
     "client/ui/*.html",
-    "client/ui/css/*.css",
-    "client/ui/scripts/*.js",
+    "client/ui/*.css",
+    "client/ui/*.js",
 }
 
 ui_page "client/ui/index.html"

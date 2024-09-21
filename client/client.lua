@@ -90,30 +90,16 @@ Citizen.CreateThread(function()
 end)
 
 function vRPBs.ClientTypePassword()
-	local password = KeyboardInput("Password:", "", 100)
-	return tostring(password)
-end
+	local keyboard, password = Keyboard({
+		rows = {"Password:"},
+		value = {""},
+	})
 
-function KeyboardInput(TextEntry, ExampleText, MaxStringLenght)
-	-- TextEntry		-->	The Text above the typing field in the black square
-	-- ExampleText		-->	An Example Text, what it should say in the typing field
-	-- MaxStringLenght	-->	Maximum String Lenght
-
-	AddTextEntry('FMMC_KEY_TIP1', TextEntry)                                                --Sets the Text above the typing field in the black square
-	DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP1", "", ExampleText, "", "", "", MaxStringLenght) --Actually calls the Keyboard Input
-
-	while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do                --While typing is not aborted and not finished, this loop waits
-		Citizen.Wait(0)
+	if keyboard then
+		return password
 	end
-
-	if UpdateOnscreenKeyboard() ~= 2 then
-		local result = GetOnscreenKeyboardResult() --Gets the result of the typing
-		Citizen.Wait(500)                      --Little Time Delay, so the Keyboard won't open again if you press enter to finish the typing
-		return result                          --Returns the result
-	else
-		Citizen.Wait(500)                      --Little Time Delay, so the Keyboard won't open again if you press enter to finish the typing
-		return nil                             --Returns nil if the typing got aborted
-	end
+	
+	return ""
 end
 
 RegisterNetEvent("ArenaAPI:ShowNotification")

@@ -1,0 +1,39 @@
+.root-keyboard-wrapper {
+    color: rgb(255, 255, 255);
+    width: 100%;
+    height: auto;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
+    position: absolute;
+    overflow: hidden;
+    background: transparent !important;
+}
+
+.keyboard-wrapper {
+    width: 35%;
+    height: auto;
+    background: rgba(10, 10, 10, 0.8);
+    margin: auto;
+    position: relative;
+    overflow: hidden;
+    padding: 1.5rem;
+    display: none;
+    user-select: none;
+}
+
+.root-keyboard-wrapper label {
+    margin-top: 0.8em;
+}
+
+.root-keyboard-wrapper input[type="text"] {
+    border: none;
+	background: rgba(0, 0, 0, 1.0);
+	color: rgb(255, 255, 255);
+}
+
+.root-keyboard-wrapper textarea[type="text"] {
+    border: none;
+	background: rgba(0, 0, 0, 1.0);
+	color: rgb(255, 255, 255);
+}
