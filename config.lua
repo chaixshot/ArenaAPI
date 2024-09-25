@@ -3,9 +3,9 @@ Config = {}
 -- Message list
 Config.MessageList = {
     ["arena_doesnt_exists"] = "Can't join",
-    ["maximum_people"] = "Room is full!",
-    ["cant_acces_this_arena"] = "Can't enter private room",
-    ["arena_busy"] = "This room is playing",
+    ["maximum_people"] = "Session is full!",
+    ["cant_acces_this_arena"] = "Can't enter private session",
+    ["arena_busy"] = "This session is playing",
     ["cooldown_to_join"] = "You have to wait %s!",
 }
 
