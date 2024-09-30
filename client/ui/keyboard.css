@@ -1,5 +1,4 @@
 .root-keyboard-wrapper {
-    color: rgb(255, 255, 255);
     width: 100%;
     height: auto;
     top: 50%;
@@ -8,6 +7,12 @@
     position: absolute;
     overflow: hidden;
     background: transparent !important;
+}
+
+html,
+body {
+    background: transparent !important;
+	color: rgb(255, 255, 255);
 }
 
 .keyboard-wrapper {
@@ -20,7 +25,9 @@
     padding: 1.5rem;
     display: none;
     user-select: none;
+    border-radius: 0.5em;
 }
+
 
 .root-keyboard-wrapper label {
     margin-top: 0.8em;

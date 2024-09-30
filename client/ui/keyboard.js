@@ -14,18 +14,28 @@ const CloseKeyboard = () => {
     Rows = [];
 };
 
-const AddRow = (data, value, istextarea) => {
+const AddRow = (data, value, isTextarea) => {
     RowsData = data
     ValueData = value
     for (let i = 0; i < RowsData.length; i++) {
-		let element
-		if(istextarea){
-			element = $('<label for="usr">' + RowsData[i] + '</label> <textarea type="text" rows="20" value="'+(ValueData[i] || "")+'" class="form-control" id="' + i + '" />');
-		}else{
-			element = $('<label for="usr">' + RowsData[i] + '</label> <input type="text" value="'+(ValueData[i] || "")+'" class="form-control" id="' + i + '" />');
-		}
+        let element
+        if (isTextarea) {
+            element = $('<label for="usr">' + RowsData[i] + '</label> <textarea type="text" rows="20" class="form-control" id="' + i + '">' + (ValueData[i] || "") + '</textarea>');
+        } else {
+            element = $('<label for="usr">' + RowsData[i] + '</label> <input type="text" value="' + (ValueData[i] || "") + '" class="form-control" id="' + i + '" />');
+        }
         $('.body').append(element);
         Rows[i] = element
+
+        if (isTextarea) {
+            let l = $("textarea").val().length
+            $('textarea').focus()
+            $('textarea')[0].setSelectionRange(l, l);
+        } else {
+            let l = $("input").val().length
+            $('input').focus()
+            $('input')[0].setSelectionRange(l, l);
+        }
     }
     document.getElementById(0).focus();
 };
@@ -49,7 +59,7 @@ const SubmitData = () => {
         }
         $(Rows[i]).remove();
     }
-    $.post(`https://${GetParentResourceName()}/keyboard_dataPost`, JSON.stringify({data: returnData}))
+    $.post(`https://${GetParentResourceName()}/keyboard_dataPost`, JSON.stringify({ data: returnData }))
 }
 
 const PostData = (data) => {

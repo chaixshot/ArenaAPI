@@ -272,7 +272,7 @@ function CreateArena(identifier, ownerSource)
     end
 
     --** Basic events for arena
-    self.OnPlayerJoinLobby = function(cb, test)
+    self.OnPlayerJoinLobby = function(cb)
         return On(identifier, "join", cb)
     end
 
