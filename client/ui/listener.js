@@ -26,10 +26,10 @@ $(function(){
 				$(".map").fadeIn();
 				$(".map").attr("src","nui://ArenaLobby/client/ui/img/games/map/"+map[1]+".jpg");
 				$(".map").error(function () {
-					$(this).fadeOut();
+					$(this).hide();
 				});
 			}else{
-				$(".map").fadeOut();
+				$(".map").hide();
 			}
 		}
 		
