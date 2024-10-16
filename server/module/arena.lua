@@ -296,7 +296,16 @@ function CreateArena(identifier, ownerSource)
         return On(identifier, eventName, cb)
     end
 
+    if arena.ArenaState == "ArenaInactive" then
+        -- Wait for server set other data
+        Citizen.CreateThread(function()
+            Citizen.Wait(500)
+            TriggerClientEvent("ArenaAPI:sendStatus", -1, "create", arena)
+        end)
+    end
+
     TriggerClientEvent("ArenaAPI:sendStatus", -1, "updateData", ArenaList)
+
     return self
 end
 
