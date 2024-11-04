@@ -84,11 +84,11 @@ end
 ---@return table ArenaData[identifier, label, maximumCapacity, minimumCapacity, currentCapacity]
 function GetCurrentArenaData(identifier)
     return {
-        ArenaIdentifier = ArenaData[identifier].ArenaIdentifier,
-        ArenaLabel = ArenaData[identifier].ArenaLabel,
-        MaximumCapacity = ArenaData[identifier].MaximumCapacity,
-        MinimumCapacity = ArenaData[identifier].MinimumCapacity,
-        CurrentCapacity = ArenaData[identifier].CurrentCapacity,
+        ArenaIdentifier = ArenaData?[identifier].ArenaIdentifier,
+        ArenaLabel = ArenaData?[identifier].ArenaLabel,
+        MaximumCapacity = ArenaData?[identifier].MaximumCapacity or -1,
+        MinimumCapacity = ArenaData?[identifier].MinimumCapacity or -1,
+        CurrentCapacity = ArenaData?[identifier].CurrentCapacity or -1,
     }
 end
 

@@ -131,6 +131,29 @@ RegisterCommand("minigame", function(source, args, rawCommand)
 	end
 end, false)
 
+RegisterCommand("ArenaAPI_List", function(source, args, rawCommand)
+	for identifier, arena in pairs(ArenaList) do
+		RconPrint("\n")
+		RconPrint("^5")
+		RconPrint("------- "..identifier.." ("..arena.ArenaState..") -------")
+		RconPrint("^0")
+		RconPrint("\n")
+		RconPrint(arena.ArenaLabel)
+		RconPrint("\n")
+
+		RconPrint("^3")
+		for src, data in pairs(arena.PlayerList) do
+			RconPrint(src.."\t"..data.name.."\t"..GetPlayerEP(src).."\t"..GetPlayerPing(src).."ms")
+			RconPrint("\n")
+		end
+		RconPrint("^2")
+		
+		RconPrint(arena.CurrentCapacity.."/"..arena.MaximumCapacity)
+		RconPrint("\n")
+		RconPrint("^0")
+	end
+end, true)
+
 ---Convert string to table by @sep
 ---@param inputstr string
 ---@param sep string
