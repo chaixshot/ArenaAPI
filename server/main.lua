@@ -226,7 +226,7 @@ function GetSteamAvatar(source)
 			for _, line in ipairs(steamProfileSplitted) do
 				if line:find('<avatarFull>') then
 					local url = line:gsub('	<avatarFull><!%[CDATA%[', ''):gsub(']]></avatarFull>', '')
-					avaterUrl:resolve(string.sub(url, 1, string.len(url) - 1))
+					avaterUrl:resolve(string.sub(url, 1, string.len(url)))
 					break
 				end
 			end
