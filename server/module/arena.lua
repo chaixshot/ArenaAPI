@@ -110,6 +110,14 @@ function CreateArena(identifier, ownerSource)
         return arena.MaximumLobbyTimeSaved, arena.MaximumLobbyTime
     end
 
+    self.GetOwnerSource = function()
+        return arena.ownerSource
+    end
+    
+    self.GetOwnerName = function()
+        return arena.ownerName
+    end
+
     self.SetArenaPublic = function(value)
         arena.ArenaIsPublic = value
     end
