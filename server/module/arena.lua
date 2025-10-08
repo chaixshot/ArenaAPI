@@ -63,6 +63,10 @@ function CreateArena(identifier, ownerSource)
     self.GetArenaIdentifier = function()
         return arena.ArenaIdentifier
     end
+        
+    self.GetArena = function()
+        return arena
+    end
 
     self.SetArenaLabel = function(name)
         arena.ArenaLabel = name
